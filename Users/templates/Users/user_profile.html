@@ -1,0 +1,15 @@
+{% extends "landing/base.html" %}
+{% block content %}
+    {% for profile in profiles %}
+        <article class="content-section">
+            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+          <div class="content-body">
+            <div class="profile-metadata">
+                <p class="profile-user">Username:{{ user.username }}</p>
+                <p class="profile-email">Email:{{ user.email }}</p>
+                <p class="profile-bio">Bio:{{ profile.bio }}</p>
+                <p class="profile-occupation">Occupation:{{ profile.occupation }}</p>
+            </div>
+        </article>
+    {% endfor %}
+{% endblock content %}
