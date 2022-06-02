@@ -1,12 +1,7 @@
-{% extends 'blog/blog_base.html' %}
-{% load static %}
+{% extends 'landing/base.html' %}
 
     <!-- Stylesheets -->
-	{% block stylesheet %}
-        {{ block.super }}
-	<link href="{% static 'blog/css/bona/comment.css' %}" rel="stylesheet">
-
-    {% endblock stylesheet %}
+	
 
 {% block title %}
     {{ article.title }}
@@ -29,9 +24,7 @@
                                         <div class="post-info">
 
                                             <div class="middle-area">
-                                                <h3><a
-                                                        href="
-                                              {% url 'blog:article_detail' username=article.author.username|lower slug=article.slug %}">
+                                                <h3><a href="{% url 'article_detail' username=article.author.username|lower slug=article.slug %}">
                                                     <b>{{ article.title }}</b></a>
                                                 </h3>
                                             </div>
@@ -57,7 +50,7 @@
 
 				<div class="col-lg-8 col-md-12">
 {#					<div class="comment-form">#}
-{#						<form method="post" action="{% url 'blog:comment_create' article.slug %}">#}
+{#						<form method="post" action="{% url 'comment_create' article.slug %}">#}
 {#                            {% csrf_token %}#}
 {#							<div class="row">#}
 {#								<div class="col-sm-6">#}

@@ -1,14 +1,18 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User 
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils import timezone
+from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
     DetailView,
     CreateView,
     UpdateView,
     DeleteView,
+    View
 )
 
 from Landing.forms import ArticleCreateForm, CommentForm
@@ -17,23 +21,16 @@ from functools import reduce
 import operator
 from django.contrib import messages
 from django.db.models import Q
-from django.views.generic import (
-    DetailView,
-    ListView,
-)
 
 
 def home(request):
-    context = {
+    context={
         'articles': Article.objects.all()
     }
     return render(request, 'landing/home.html', context)
 
-
-
-
-
 class ArticleListView(ListView):
+    model= Article
     context_object_name = "articles"
     paginate_by = 12
     queryset = Article.objects.filter(status=Article.PUBLISHED, deleted=False)
@@ -43,6 +40,7 @@ class ArticleListView(ListView):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.filter(approved=True)
         return context
+
 
 
 class ArticleDetailView(DetailView):
@@ -66,7 +64,7 @@ class ArticleDetailView(DetailView):
 class ArticleSearchListView(ListView):
     model = Article
     paginate_by = 12
-    context_object_name = 'search_results'
+    context_object_name = 'article_search_list_view'
     template_name = "landing/article_search_list.html"
 
     def get_queryset(self):
@@ -156,7 +154,7 @@ class AuthorArticlesListView(ListView):
     model = Article
     paginate_by = 12
     context_object_name = 'articles'
-    template_name = 'blog/authors/author_articles.html'
+    template_name = 'landing/author_articles.html'
 
     def get_queryset(self):
         author = get_object_or_404(User, username=self.kwargs.get('username'))
@@ -201,7 +199,7 @@ class CategoriesListView(ListView):
     model = Category
     paginate_by = 12
     context_object_name = 'categories'
-    template_name = 'blog/category/categories_list.html'
+    template_name = 'landing/categories_list.html'
 
     def get_queryset(self):
         return Category.objects.order_by('-date_created')
@@ -226,7 +224,7 @@ class CategoryUpdateCreateView(LoginRequiredMixin, SuccessMessageMixin,
     model = Category
     fields = ["name", "image"]
     template_name = 'landing/category_form.html'
-    success_url = reverse_lazy("landing:categories_list")
+    success_url = reverse_lazy("categories_list")
     success_message = "Category Updated Successfully"
 
 
@@ -239,7 +237,7 @@ class CommentCreateView(CreateView):
                                             slug=self.kwargs.get('slug'))
         comment.save()
         messages.success(self.request, "Comment Added successfully")
-        return redirect('landing:article_comments', comment.article.slug)
+        return redirect('article_comments', comment.article.slug)
 
 
 class ArticleCommentList(ListView):
@@ -336,7 +334,7 @@ class ArticleWriteView(LoginRequiredMixin, View):
                 article_create_form.save_m2m()
 
                 messages.success(request, f"Article drafted successfully.")
-                return redirect("blog:drafted_articles")
+                return redirect("drafted_articles")
 
             self.context_object["article_create_form"] = article_create_form
             messages.error(request, "Please fill required fields")
@@ -363,7 +361,7 @@ class ArticleWriteView(LoginRequiredMixin, View):
                 article_create_form.save_m2m()
 
                 messages.success(self.request, f"Article published successfully.")
-                return redirect(to="blog:dashboard_article_detail", slug=new_article.slug)
+                return redirect(to="dashboard_article_detail", slug=new_article.slug)
 
             self.context_object["article_create_form"] = article_create_form
             messages.error(request, "Please fill required fields")
@@ -375,7 +373,7 @@ class ArticleUpdateView(LoginRequiredMixin, View):
     SAVE_AS_DRAFT = "SAVE_AS_DRAFT"
     PUBLISH = "PUBLISH"
 
-    template_name = 'dashboard/author/article_update_form.html'
+    template_name = 'landing/article_update_form.html'
     context_object = {}
 
     def get(self, request, *args, **kwargs):
@@ -409,7 +407,7 @@ class ArticleUpdateView(LoginRequiredMixin, View):
 
             if not request.user == old_article.author.username:
                 messages.error(request=self.request, message="You do not have permission to update this article.")
-                return redirect(to="blog:written_articles")
+                return redirect(to="written_articles")
 
             if article_update_form.is_valid():
                 updated_article = article_update_form.save(commit=False)
@@ -420,7 +418,7 @@ class ArticleUpdateView(LoginRequiredMixin, View):
                 article_update_form.save_m2m()
 
                 messages.success(request, f"Article drafted successfully.")
-                return redirect("blog:drafted_articles")
+                return redirect("drafted_articles")
 
             self.context_object["article_update_form"] = article_update_form
             messages.error(request, "Please fill required fields")
@@ -450,7 +448,7 @@ class ArticleUpdateView(LoginRequiredMixin, View):
                 article_update_form.save_m2m()
 
                 messages.success(self.request, f"Article updated successfully.")
-                return redirect(to="blog:dashboard_article_detail", slug=updated_article.slug)
+                return redirect(to="dashboard_article_detail", slug=updated_article.slug)
 
             self.context_object["article_update_form"] = article_update_form
             messages.error(request, "Please fill required fields")
@@ -480,7 +478,7 @@ class ArticleDeleteView(LoginRequiredMixin, View):
         article.save()
 
         messages.success(request=self.request, message="Article Deleted Successfully")
-        return redirect(to='landing:deleted_articles')
+        return redirect(to='deleted_articles')
 
 
 class DashboardArticleDetailView(LoginRequiredMixin, View):
@@ -523,7 +521,7 @@ class ArticlePublishView(LoginRequiredMixin, View):
         article.save()
 
         messages.success(request, f"Article Published successfully.")
-        return redirect('landing:dashboard_article_detail', slug=article.slug)
+        return redirect('dashboard_article_detail', slug=article.slug)
 
 
 class AuthorWrittenArticlesView(LoginRequiredMixin, View):
@@ -535,7 +533,7 @@ class AuthorWrittenArticlesView(LoginRequiredMixin, View):
         """
            Returns all articles written by an author.
         """
-        template_name = 'landing/author_written_article_list.html'
+        template_name = 'Landing/author_written_article_list.html'
         context_object = {}
 
         written_articles = Article.objects.filter(author=request.user.id, deleted=False).order_by('-date_created')
@@ -598,7 +596,7 @@ class AuthorDraftedArticlesView(LoginRequiredMixin, View):
         """
            Returns drafted articles by an author.
         """
-        template_name = 'dashboard/author/author_drafted_article_list.html'
+        template_name = 'landing/author_drafted_article_list.html'
         context_object = {}
 
         drafted_articles = Article.objects.filter(author=request.user.id,
@@ -630,7 +628,7 @@ class AuthorDeletedArticlesView(LoginRequiredMixin, View):
         """
            Returns deleted articles by an author.
         """
-        template_name = 'dashboard/author/author_deleted_article_list.html'
+        template_name = 'landing/author_deleted_article_list.html'
         context_object = {}
 
         deleted_articles = Article.objects.filter(author=request.user.id,

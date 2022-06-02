@@ -1,12 +1,10 @@
 from django import forms
-from .models import Space
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django import forms
 from django.forms import TextInput, Select, FileInput
-from ckeditor.widgets import CKEditorWidget
 from django.forms import ModelForm, TextInput, EmailInput, Textarea
-from blog.models.comment_models import Comment
+from .models import Article, Comment, Category
 
 
 
@@ -80,16 +78,15 @@ class ArticleCreateForm(forms.ModelForm):
             'image_credit': TextInput(attrs={
                 'name': "image_credit",
                 'class': "form-control",
-                'placeholder': "Example: made4dev.com (Premium Programming T-shirts)",
+                'placeholder': "Photo Credit",
                 'id': "image_credit"
             }),
 
-            'body': forms.CharField(widget=CKEditorWidget(config_name="default", attrs={
-                       "rows": 5, "cols": 20,
+            '': TextInput( attrs={
                        'id': 'content',
                        'name': "article_content",
                        'class': "form-control",
-                       })),
+                       }),
 
             'tags': TextInput(attrs={
                                      'name': "tags",
@@ -165,12 +162,14 @@ class ArticleUpdateForm(forms.ModelForm):
                                  "title": "Select Status"
                              }
                              ),
-            'body': forms.CharField(widget=CKEditorWidget(config_name="default", attrs={
-                       "rows": 5, "cols": 20,
+            'body': TextInput( attrs={
                        'id': 'content',
                        'name': "article_content",
                        'class': "form-control",
-                       })),
+                       'name': "article-title",
+                       'placeholder': "Enter Article Content",
+              
+                       }),
 
             'image': FileInput(attrs={
                 "class": "form-control clearablefileinput",

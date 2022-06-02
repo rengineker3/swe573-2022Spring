@@ -1,5 +1,4 @@
-{% extends 'blog/blog_base.html' %}
-{% load static %}
+{% extends 'landing/base.html' %}
 
 
 {% block title %}
@@ -8,14 +7,9 @@
 
 
 {% block content %}
-    <div class="slider display-table center-text"
-             style="background-image: url({% static 'blog/images/slider-1.jpg'%});
-                    background-size: contain;
-                 height: 400px; width: 100%;">
-		<h1 class="title display-table-cell cell-color"><b>CATEGORIES</b></h1>
-	</div><!-- slider -->
 
-	<section class="blog-area section">
+
+	<section class="landing-area section">
 		<div class="container">
             {% if categories %}
 			<div class="row">
@@ -24,13 +18,13 @@
 					<div class="card h-100">
 						<div class="single-post post-style-1">
 
-							<div class="blog-image">
+							<div class="landing-image">
                                 <img src="{{ category.image.url }}"
                                      width="352" height="235"
                                      alt="Category Image">
                             </div>
 
-							<div class="blog-info">
+							<div class="landing-info">
 
 								<h4 class="title"><a href="{{ category.get_absolute_url }}"><b>{{ category.name }}</b></a></h4>
 

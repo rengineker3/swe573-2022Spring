@@ -1,4 +1,4 @@
-{% extends 'blog/blog_base.html' %}
+{% extends 'landing/base.html' %}
 
 {% block title %}
     Author
@@ -6,15 +6,9 @@
 
 
 {% block content %}
-    <div class="slider display-table center-text"
-                 style="background-image: url({{ author.profile.banner_image.url }});
-                    background-size: contain;
-                 height: 400px; width: 100%;">
-		<h1 class="title display-table-cell cell-color">
-            <b>{{ author.username }}</b></h1>
-	</div><!-- slider -->
+  
 
-	<section class="blog-area section">
+	<section class="landing-area section">
 		<div class="container">
            {% if articles %}
 			<div class="row">
@@ -22,23 +16,22 @@
 				<div class="col-lg-4 col-md-6">
 					<div class="card h-100">
 						<div class="single-post post-style-1">
-							<div class="blog-image">
+							<div class="landing-image">
                                 <img src="{{ article.image.url }}"
                                      width="330" height="220"
                                      alt="Blog Image">
                             </div>
 
-							<a class="avatar" href="{% url 'blog:author_articles' article.author.username %}">
+							<a class="avatar" href="{% url 'author_articles' article.author.username %}">
                                 <img src="{{ article.author.profile.image.url }}"
                                                             alt="Profile Image" class="profile-image">
                             </a>
 
-							<div class="blog-info">
+							<div class="landing-info">
 
 								<h4 class="title"><a href="{{ article.get_absolute_url }}"><b>{{ article.title }}</b></a></h4>
 
 								<ul class="post-footer">
-									<li><a><i class="ion-ios-clock"></i>{{ article.read_time }} min{{ article.read_time|pluralize }} read</a></li>
 									<li><i class="ion-chatbubbles"></i>{{ article.comments.count }}</li>
 									<li><i class="ion-eye"></i>{{ article.views }}</li>
 								</ul>

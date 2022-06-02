@@ -1,15 +1,10 @@
-{% extends 'dashboard/dashboard_base.html' %}
-{% load static %}
-{% load only_hours %}
+{% extends 'landing/dashboard_base.html' %}
 
 {% block title %}
     Published Articles
 {% endblock title %}
 
-{% block stylesheets %}
-     {{ block.super }}
-        <link href="{% static 'dashboard/author/css/dashboard-article.css' %}" rel="stylesheet" />
-{% endblock stylesheets %}
+
 
 
 {% block content %}
@@ -36,7 +31,7 @@
                             </div>
                           <div class="card-body">
                             <div class="content">
-                                     <section class="blog-list px-3 py-5 p-md-5">
+                                     <section class="landing-list px-3 py-5 p-md-5">
                                      {% if published_articles_list %}
                                             <div class="container">
                                            {% for article in published_articles_list  %}
@@ -44,23 +39,21 @@
                                                     <div class="media">
                                                         <img class="mr-3 img-fluid post-thumb d-none d-md-flex" src="{{ article.image.url }}" alt="image">
                                                         <div class="media-body">
-                                                            <h3 class="title mb-1"><a href="{% url 'blog:dashboard_article_detail' slug=article.slug %}">{{ article.title }}</a></h3>
-                                                            <div class="meta mb-1"><span class="date"><b>Published:</b> <i>{{ article.date_published|timesince|upto:','}} ago</i></span>
-                                                                <span class="time">{{ article.count_words }} word{{ article.count_words|pluralize }}</span>
-                                                                <span class="time">{{ article.read_time }} min{{ article.read_time|pluralize }} read</span>
+                                                            <h3 class="title mb-1"><a href="{% url 'dashboard_article_detail' slug=article.slug %}">{{ article.title }}</a></h3>
+                                                            <div class="meta mb-1"><span class="date"><b>Published:</b> <i>{{ article.date_published|timesince}} ago</i></span>
                                                                 <span class="comment">{{ article.views }} view{{ article.views|pluralize }}</span>
                                                                 <span class="comment"><a href="#">{{ article.comments.count }} comment{{ article.comments.count|pluralize }}</a></span>
                                                                 <span class="time">
                                                                 <i class="fas fa-chevron-down" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 </i>
                                                                 <div class="dropdown-menu">
-                                                                    <a class="dropdown-item" href="{% url 'blog:article_update' slug=article.slug %}">Edit Article</a>
+                                                                    <a class="dropdown-item" href="{% url 'article_update' slug=article.slug %}">Edit Article</a>
                                                                     <div class="dropdown-divider w-100" ></div>
                                                                     <a data-toggle="modal" data-target="#deleteModal" class="dropdown-item" href="javascript:void(0)">Delete Article</a>
                                                                 </div>
                                                               </span>
                                                             </div>
-                                                            <a class="more-link" href="{% url 'blog:dashboard_article_detail' slug=article.slug %}">View details &rarr;</a>
+                                                            <a class="more-link" href="{% url 'dashboard_article_detail' slug=article.slug %}">View details &rarr;</a>
                                                           <hr class="solid"><!-- Solid divider -->
                                                         </div><!--//media-body-->
                                                     </div><!--//media-->
@@ -90,7 +83,7 @@
                                                 >
                                                   Cancel
                                                 </button>
-                                                <a class="btn btn-danger" href="{% url 'blog:article_delete' slug=article.slug %}">Delete Article</a>
+                                                <a class="btn btn-danger" href="{% url 'article_delete' slug=article.slug %}">Delete Article</a>
                                               </div>
                                             </div>
                                           </div>

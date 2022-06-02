@@ -1,5 +1,5 @@
-{% extends 'blog/blog_base.html' %}
-{% load static %}
+{% extends 'landing/base.html' %}
+
 
 {% block title %}
     Authors
@@ -7,53 +7,26 @@
 
 
 {% block content %}
-    <div class="slider display-table center-text"
-             style="background-image: url({% static 'blog/images/authors_banner.png' %});
-                    background-size: contain;
-                 height: 400px; width: 100%;">
-		<h1 class="title display-table-cell cell-color"><b>AUTHORS</b></h1>
-	</div><!-- slider -->
+   
 
-	<section class="blog-area section">
+	<section class="landing-area section">
 		<div class="container">
             {% if authors %}
                 <div class="row">
                      {% for author in authors %}
                     <div class="col-lg-3 col-sm-6">
-
-                        <div class="card h-100 hovercard">
-                            <div class="cardheader" style="background: url({{ author.profile.banner_image.url }});
-                                 background-size: cover; height: 135px; ">
-
-                            </div>
                             <div class="avatar">
                                 <img alt="" src="{{ author.profile.image.url }}">
                             </div>
                             <div class="info">
                                 <div class="title">
-                                    <a href="{% url 'blog:author_articles' author.username %}">
+                                    <a href="{% url 'author_articles' author.username %}">
                                         {{ author.username }}
                                     </a>
                                 </div>
                                 <div class="desc job-title">{{ author.profile.job_title }}</div>
                                 <div class="desc bio">{{ author.profile.bio }}</div>
                                 <div class="desc date-joined">Joined on {{ author.profile.user.date_joined|date:"M Y"}}</div>
-                            </div>
-                            <div class="bottom">
-                                <a class="btn btn-primary btn-twitter btn-sm footer-card" href="{{ author.profile.twitter_url }}">
-                                    <i class="fa fa-twitter"></i>
-                                </a>
-                                <a class="btn btn-danger btn-sm footer-card" rel="publisher"
-                                   href="{{ author.profile.instagram_url }}">
-                                    <i class="fa fa-instagram"></i>
-                                </a>
-                                <a class="btn btn-primary btn-sm card-btn footer-card" rel="publisher"
-                                   href="{{ author.profile.facebook_url }}">
-                                    <i class="fa fa-facebook"></i>
-                                </a>
-                                <a class="btn btn-secondary btn-sm footer-card" rel="publisher" href="{{ author.profile.github_url }}">
-                                    <i class="fa fa-github"></i>
-                                </a>
                             </div>
                         </div>
 
