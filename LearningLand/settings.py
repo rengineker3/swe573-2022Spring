@@ -11,11 +11,15 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+from environ import Env
+import environ
 import os
 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+env = Env()
+env.read_env(env_file='LearningLand/.env')
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,7 +31,7 @@ SECRET_KEY = 'django-insecure-vj=6e(p-p1pvydqra8*_puc#r6g1qd605y#5$&ygn12kjx_c#s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,7 +46,6 @@ INSTALLED_APPS = [
     'Landing',
     'Users',
     'crispy_forms',
-    'bootstrap4',
     'taggit',
 ]
 
@@ -80,17 +83,30 @@ WSGI_APPLICATION = 'LearningLand.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#    'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'LearningLand1', 
+#         'USER': 'postgres', 
+#         'PASSWORD': 'WakeUpLove03.55',
+#         'HOST': 'localhost', 
+#         'PORT': '5433',
+#     }
+# }
+
 DATABASES = {
-   'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'LearningLand1', 
-        'USER': 'postgres', 
-        'PASSWORD': 'WakeUpLove03.55',
-        'HOST': 'localhost', 
-        'PORT': '5433',
+
+      'default': {
+        'ENGINE': env('DB_ENGINE', default = 'django.db.backends.postgresql_psycopg2'),
+        'NAME': env('DB_NAME', default='LearningLand1'), 
+        'USER': env('DB_USER', default='postgres'), 
+         'PASSWORD': env('DB_PASSWORD', default='WakeUpLove03.55'),
+        #'PASSWORD': env('DB_PASSWORD', default='q1w2e3'),
+        #'HOST': env('DB_HOST', default='127.0.0.1'), 
+        'HOST': env('DB_HOST'), 
+        'PORT': env('DB_PORT', default='5433'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -151,89 +167,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ADMIN_MEDIA_PREFIX = '/admin/media/'
 
-CKEDITOR_CONFIGS = {
-'portal_config': {
-    # 'skin': 'moono',
-    # 'skin': 'office2013',
-    'toolbar_Basic': [
-        ['Source', '-', 'Bold', 'Italic']
-    ],
-    'toolbar_YourCustomToolbarConfig': [
-        {'name': 'document', 'items': [
-            'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates'
-        ]},
-        {'name': 'clipboard', 'items': [
-            'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'
-        ]},
-        {'name': 'editing', 'items': ['Find', 'Replace', '-', 'SelectAll']},
-        {'name': 'forms',
-         'items': [
-             'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea',
-             'Select', 'Button', 'ImageButton', 'HiddenField'
-         ]},
-        '/',
-        {'name': 'basicstyles',
-         'items': [
-             'Bold', 'Italic', 'Underline', 'Strike', 'Subscript',
-             'Superscript', '-', 'RemoveFormat'
-         ]},
-        {'name': 'paragraph',
-         'items': [
-             'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent',
-             '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft',
-             'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',
-             'BidiLtr', 'BidiRtl', 'Language'
-         ]},
-        {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
-        {'name': 'insert',
-         'items': [
-             'Image', 'Table', 'HorizontalRule',
-             'Smiley', 'SpecialChar', 'PageBreak', 'Iframe'
-         ]},
-        '/',
-        {'name': 'styles', 'items': ['Styles', 'Format', 'Font', 'FontSize']},
-        {'name': 'colors', 'items': ['TextColor', 'BGColor']},
-        {'name': 'tools', 'items': ['Maximize', 'ShowBlocks']},
-        {'name': 'about', 'items': ['About']},
-        '/',  # put this to force next toolbar on new line
-        {'name': 'yourcustomtools', 'items': [
-            # put the name of your editor.ui.addButton here
-            'Preview',
-            'Maximize',
 
-        ]},
-    ],
-    'toolbar': 'YourCustomToolbarConfig',  # put selected toolbar config here
-    # 'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
-    # 'height': 291,
-    # 'width': '100%',
-    # 'filebrowserWindowHeight': 725,
-    # 'filebrowserWindowWidth': 940,
-    # 'toolbarCanCollapse': True,
-    # 'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
-    'tabSpaces': 4,
-    'extraPlugins': ','.join([
-        'uploadimage',  # the upload image feature
-        # your extra plugins here
-        'div',
-        'autolink',
-        'autoembed',
-        'embedsemantic',
-        'autogrow',
-        # 'devtools',
-        'widget',
-        'lineutils',
-        'clipboard',
-        'dialog',
-        'dialogui',
-        'elementspath'
-    ]),
-    }
-}
-
-# Markdown
-MARKDOWN_EDITOR_SKIN = 'simple'
-
-CKEDITOR_UPLOAD_PATH = "uploads/"
-CKEDITOR_IMAGE_BACKEND = "pillow"
-CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
