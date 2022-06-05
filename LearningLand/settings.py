@@ -11,11 +11,15 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+from environ import Env
+import environ
 import os
 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+env = Env()
+env.read_env(env_file='LearningLand/.env')
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,7 +31,7 @@ SECRET_KEY = 'django-insecure-vj=6e(p-p1pvydqra8*_puc#r6g1qd605y#5$&ygn12kjx_c#s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,7 +46,6 @@ INSTALLED_APPS = [
     'Landing',
     'Users',
     'crispy_forms',
-    'bootstrap4',
     'taggit',
 ]
 
@@ -80,17 +83,30 @@ WSGI_APPLICATION = 'LearningLand.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#    'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'LearningLand1', 
+#         'USER': 'postgres', 
+#         'PASSWORD': 'WakeUpLove03.55',
+#         'HOST': 'localhost', 
+#         'PORT': '5433',
+#     }
+# }
+
 DATABASES = {
-   'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'LearningLand1', 
-        'USER': 'postgres', 
-        'PASSWORD': 'WakeUpLove03.55',
-        'HOST': 'localhost', 
-        'PORT': '5433',
+
+      'default': {
+        'ENGINE': env('DB_ENGINE', default = 'django.db.backends.postgresql_psycopg2'),
+        'NAME': env('DB_NAME', default='LearningLand1'), 
+        'USER': env('DB_USER', default='postgres'), 
+         'PASSWORD': env('DB_PASSWORD', default='WakeUpLove03.55'),
+        #'PASSWORD': env('DB_PASSWORD', default='q1w2e3'),
+        #'HOST': env('DB_HOST', default='127.0.0.1'), 
+        'HOST': env('DB_HOST'), 
+        'PORT': env('DB_PORT', default='5433'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -151,7 +167,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ADMIN_MEDIA_PREFIX = '/admin/media/'
 
-import environ
-# Initialise environment variables
-env = environ.Env()
-environ.Env.read_env()
+
