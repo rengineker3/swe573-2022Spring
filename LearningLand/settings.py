@@ -26,12 +26,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-vj=6e(p-p1pvydqra8*_puc#r6g1qd605y#5$&ygn12kjx_c#s'
+SECRET_KEY = env('DJANGO_SECRET_KEY', default = 'ej4f!ops$$=3++angbf!+ycg^!mf^48%tj(e+e^@=uln9p8)lv')   
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DJANGO_DEBUG', default=True)
 
 ALLOWED_HOSTS = ['*']
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 
 # Application definition
@@ -43,11 +51,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'Landing',
     'Users',
     'crispy_forms',
     'taggit',
+
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -64,7 +76,7 @@ ROOT_URLCONF = 'LearningLand.urls'
 TEMPLATES = [
      {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -86,7 +98,7 @@ WSGI_APPLICATION = 'LearningLand.wsgi.application'
 # DATABASES = {
 #    'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'LearningLand1', 
+#         'NAME': 'learningland', 
 #         'USER': 'postgres', 
 #         'PASSWORD': 'WakeUpLove03.55',
 #         'HOST': 'localhost', 
@@ -98,12 +110,12 @@ DATABASES = {
 
       'default': {
         'ENGINE': env('DB_ENGINE', default = 'django.db.backends.postgresql_psycopg2'),
-        'NAME': env('DB_NAME', default='LearningLand1'), 
+        'NAME': env('DB_NAME', default='learningland'), 
         'USER': env('DB_USER', default='postgres'), 
-         'PASSWORD': env('DB_PASSWORD', default='WakeUpLove03.55'),
+        'PASSWORD': env('DB_PASSWORD', default='WakeUpLove03.55'),
         #'PASSWORD': env('DB_PASSWORD', default='q1w2e3'),
-        #'HOST': env('DB_HOST', default='127.0.0.1'), 
-        'HOST': env('DB_HOST'), 
+        'HOST': env('DB_HOST', default='127.0.0.1'), 
+        #'HOST': env('DB_HOST'), 
         'PORT': env('DB_PORT', default='5433'),
     }
 }
@@ -132,17 +144,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Istanbul'
 
 USE_I18N = True
 
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
-
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -150,7 +158,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL = '/static/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
@@ -159,6 +167,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL='home' 
 ACCOUNT_EMAIL_REQUIRED = True
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

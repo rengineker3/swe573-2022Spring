@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User 
@@ -15,7 +16,7 @@ from django.views.generic import (
     View
 )
 
-from Landing.forms import ArticleCreateForm, CommentForm
+from Landing.forms import ArticleCreateForm, ArticleUpdateForm, CommentForm
 from .models import Comment, Category, Article
 from functools import reduce
 import operator
@@ -27,14 +28,14 @@ def home(request):
     context={
         'articles': Article.objects.all()
     }
-    return render(request, 'landing/home.html', context)
+    return render(request, 'Landing/home.html', context)
 
 class ArticleListView(ListView):
     model= Article
     context_object_name = "articles"
     paginate_by = 12
     queryset = Article.objects.filter(status=Article.PUBLISHED, deleted=False)
-    template_name = "landing/home.html"
+    template_name = "Landing/home.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -45,7 +46,7 @@ class ArticleListView(ListView):
 
 class ArticleDetailView(DetailView):
     model = Article
-    template_name = 'landing/article_detail.html'
+    template_name = 'Landing/article_detail.html'
 
     def get_context_data(self, **kwargs):
         session_key = f"viewed_article {self.object.slug}"
@@ -65,7 +66,7 @@ class ArticleSearchListView(ListView):
     model = Article
     paginate_by = 12
     context_object_name = 'article_search_list_view'
-    template_name = "landing/article_search_list.html"
+    template_name = "Landing/article_search_list.html"
 
     def get_queryset(self):
         """
@@ -119,7 +120,7 @@ class TagArticlesListView(ListView):
     model = Article
     paginate_by = 12
     context_object_name = 'tag_articles_list'
-    template_name = 'landing/tag_articles_list.html'
+    template_name = 'Landing/tag_articles_list.html'
 
     def get_queryset(self):
         """
@@ -154,7 +155,7 @@ class AuthorArticlesListView(ListView):
     model = Article
     paginate_by = 12
     context_object_name = 'articles'
-    template_name = 'landing/author_articles.html'
+    template_name = 'Landing/author_articles.html'
 
     def get_queryset(self):
         author = get_object_or_404(User, username=self.kwargs.get('username'))
@@ -171,7 +172,7 @@ class AuthorsListView(ListView):
     model = User
     paginate_by = 12
     context_object_name = 'authors'
-    template_name = 'landing/authors_list.html'
+    template_name = 'Landing/authors_list.html'
 
     def get_queryset(self):
         return User.objects.all().order_by('-date_joined')
@@ -182,7 +183,7 @@ class CategoryArticlesListView(ListView):
     model = Article
     paginate_by = 12
     context_object_name = 'articles'
-    template_name = 'landing/category_articles.html'
+    template_name = 'Landing/category_articles.html'
 
     def get_queryset(self):
         category = get_object_or_404(Category, slug=self.kwargs.get('slug'))
@@ -199,7 +200,7 @@ class CategoriesListView(ListView):
     model = Category
     paginate_by = 12
     context_object_name = 'categories'
-    template_name = 'landing/categories_list.html'
+    template_name = 'Landing/categories_list.html'
 
     def get_queryset(self):
         return Category.objects.order_by('-date_created')
@@ -208,7 +209,7 @@ class CategoriesListView(ListView):
 class CategoryCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Category
     fields = ["name", "image"]
-    template_name = 'landing/category_form.html'
+    template_name = 'Landing/category_form.html'
 
     def form_valid(self, form):
         form.instance.save()
@@ -223,7 +224,7 @@ class CategoryUpdateCreateView(LoginRequiredMixin, SuccessMessageMixin,
                                UpdateView):
     model = Category
     fields = ["name", "image"]
-    template_name = 'landing/category_form.html'
+    template_name = 'Landing/category_form.html'
     success_url = reverse_lazy("categories_list")
     success_message = "Category Updated Successfully"
 
@@ -243,7 +244,7 @@ class CommentCreateView(CreateView):
 class ArticleCommentList(ListView):
     context_object_name = "comments"
     paginate_by = 10
-    template_name = "landing/article_comments.html"
+    template_name = "Landing/article_comments.html"
 
     def get_queryset(self):
         article = get_object_or_404(Article, slug=self.kwargs.get('slug'))
@@ -263,7 +264,7 @@ class DashboardHomeView(LoginRequiredMixin, View):
     Display homepage of the dashboard.
     """
     context = {}
-    template_name = 'landing/dashboard_home.html'
+    template_name = 'Landing/dashboard_home.html'
 
     def get(self, request, *args, **kwargs):
         """
@@ -296,7 +297,7 @@ class ArticleWriteView(LoginRequiredMixin, View):
     SAVE_AS_DRAFT = "SAVE_AS_DRAFT"
     PUBLISH = "PUBLISH"
 
-    template_name = 'landing/article_create_form.html'
+    template_name = 'Landing/article_create_form.html'
     context_object = {}
 
     def get(self, request, *args, **kwargs):
@@ -373,7 +374,7 @@ class ArticleUpdateView(LoginRequiredMixin, View):
     SAVE_AS_DRAFT = "SAVE_AS_DRAFT"
     PUBLISH = "PUBLISH"
 
-    template_name = 'landing/article_update_form.html'
+    template_name = 'Landing/article_update_form.html'
     context_object = {}
 
     def get(self, request, *args, **kwargs):
@@ -490,7 +491,7 @@ class DashboardArticleDetailView(LoginRequiredMixin, View):
         """
            Returns article details.
         """
-        template_name = 'landing/dashboard_article_detail.html'
+        template_name = 'Landing/dashboard_article_detail.html'
         context_object = {}
 
         article = get_object_or_404(Article, slug=self.kwargs.get("slug"))
@@ -564,7 +565,7 @@ class AuthorPublishedArticlesView(LoginRequiredMixin, View):
         """
            Returns published articles by an author.
         """
-        template_name = 'landing/author_published_article_list.html'
+        template_name = 'Landing/author_published_article_list.html'
         context_object = {}
 
         published_articles = Article.objects.filter(author=request.user.id,
@@ -596,7 +597,7 @@ class AuthorDraftedArticlesView(LoginRequiredMixin, View):
         """
            Returns drafted articles by an author.
         """
-        template_name = 'landing/author_drafted_article_list.html'
+        template_name = 'Landing/author_drafted_article_list.html'
         context_object = {}
 
         drafted_articles = Article.objects.filter(author=request.user.id,
@@ -628,7 +629,7 @@ class AuthorDeletedArticlesView(LoginRequiredMixin, View):
         """
            Returns deleted articles by an author.
         """
-        template_name = 'landing/author_deleted_article_list.html'
+        template_name = 'Landing/author_deleted_article_list.html'
         context_object = {}
 
         deleted_articles = Article.objects.filter(author=request.user.id,
