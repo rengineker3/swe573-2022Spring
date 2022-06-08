@@ -22,7 +22,7 @@ To see deployment: [LearningLand](http://ec2-3-92-141-216.compute-1.amazonaws.co
 `docker exec -it core_db bash`
 `psql -U postgres`
 `CREATE DATABASE learningland;`
-`/l  (to check if the database is created).
+`/l`  (to check if the database is created).
 
 * After database creation run this command:  
 `docker-compose up` Check if the containers are up and running.
