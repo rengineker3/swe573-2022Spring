@@ -19,8 +19,7 @@
                             <img src="{{ category.image.url }}"
                                  class="category-image"
                                  alt="Blog Image"
-                                 width="352" height="235"
-                             >
+                                 style="width: 120px; Height:120px">
                         </div>
 
 						<div class="category">
@@ -58,8 +57,8 @@
                                 >
                             </div>
 
-							<a class="avatar" href="{% url ':author_articles' article.author.username %}">
-                                <img class="profile-image" src="{{ article.author.profile.image.url }}" alt="Profile Image">
+							<a class="avatar" href="{% url 'author_articles' article.author.username %}">
+                                <img class="profile-image" src="{{ article.author.profile.image.url }}" style="width: 70px; height:70px" alt="Profile Image">
                             </a>
 
 							<div class="landing-info">
