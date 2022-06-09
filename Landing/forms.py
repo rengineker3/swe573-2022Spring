@@ -82,10 +82,11 @@ class ArticleCreateForm(forms.ModelForm):
                 'id': "image_credit"
             }),
 
-            '': TextInput( attrs={
+            'body': TextInput( attrs={
                        'id': 'content',
                        'name': "article_content",
                        'class': "form-control",
+                       'placeholder': "Enter Article Description",
                        }),
 
             'tags': TextInput(attrs={

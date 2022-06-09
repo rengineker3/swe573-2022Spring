@@ -214,9 +214,7 @@ class CategoryCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def form_valid(self, form):
         form.instance.save()
         messages.success(self.request, f"'{form.instance.name}' "
-                                       f"submitted successfully. You will be "
-                                       f"notified when it is approved."
-                                       f"Thank you !!!")
+                                       f"submitted successfully.")
         return redirect('/')
 
 
