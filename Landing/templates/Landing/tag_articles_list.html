@@ -81,7 +81,7 @@
                             </div>
 
 							<a class="avatar" href="{% url 'author_articles' article.author.username %}">
-                                <img src="{{ article.author.profile.image.url }}" alt="Profile Image"
+                                <img src="{{ article.author.profile.image.url }}" alt="Profile Image" style="width: 70px; height:70px"
                                      class="profile-image">
                             </a>
 
@@ -90,8 +90,8 @@
 								<h4 class="title"><a href="{{ article.get_absolute_url }}"><b>{{ article.title }}</b></a></h4>
 
 								<ul class="post-footer">
-									<li><i class="ion-chatbubbles"></i>{{ article.comments.count }}</li>
-									<li><i class="ion-eye"></i>{{ article.views }}</li>
+									<li><i class="ion-chatbubbles"></i> Number of Comments:{{ article.comments.count }}</li>
+									<li><i class="ion-eye"></i>Number of Views:{{ article.views }}</li>
 								</ul>
 
 							</div><!-- article-info -->

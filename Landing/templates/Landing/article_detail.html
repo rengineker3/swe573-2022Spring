@@ -29,7 +29,7 @@
 
 								<div class="left-area">
 									<a class="avatar" href="{% url 'author_articles' article.author.username %}">
-                                        <img src="{{ article.author.profile.image.url }}" alt="Profile Image" class="article-author-profile-image"></a>
+                                        <img src="{{ article.author.profile.image.url }}" alt="Profile Image" style="width: 70px; height:70px" class="article-author-profile-image"></a>
 								</div>
 
 								<div class="middle-area">
@@ -49,7 +49,7 @@
 
 						</div><!-- post-top-area -->
 
-						<figure class="post-image"><img class="article-image" src="{{ article.image.url }}" alt="Blog Image">
+						<figure class="post-image"><img class="article-image" src="{{ article.image.url }}" style="width: 650px; height: 480px;" alt="Blog Image">
 				       {% if article.image_credit %}
                            <figcaption class="mt-2 text-center image-caption">
                             (Image Credit: {{ article.image_credit}})
@@ -90,12 +90,12 @@
 
 							<div class="landing-image">
                                 <img src="{{ related_article.image.url }}"
-                                     width="330" height="220"
+                                     width="330px" height="220px	"
                                      alt="Blog Image">
                             </div>
 
 							<a class="avatar" href="{% url 'author_articles' related_article.author.username %}">
-                                <img class="profile-image" src="{{ related_article.author.profile.image.url }}" alt="Profile Image"></a>
+                                <img class="profile-image" src="{{ related_article.author.profile.image.url }}" style="width: 70px; height:70px" alt="Profile Image"></a>
 
 							<div class="landing-info">
 
@@ -103,8 +103,8 @@
                                     <b>{{ related_article.title }}</b></a></h4>
 
 								<ul class="post-footer">
-									<li><i class="ion-chatbubble"></i>{{ article.comments.count }}</li>
-									<li><i class="ion-eye"></i>{{ article.views }}</li>
+									<li><i class="ion-chatbubble"></i>Number of Comments:{{ article.comments.count }}</li>
+									<li><i class="ion-eye"></i>Number of Views:{{ article.views }}</li>
 								</ul>
 
 							</div><!-- article-info -->
