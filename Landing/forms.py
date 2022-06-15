@@ -32,7 +32,7 @@ class DateTimeLocalField(forms.DateTimeField):
 class ArticleCreateForm(forms.ModelForm):
     category = forms.ModelChoiceField(queryset=Category.objects.filter(
                                       approved=True),
-                                      empty_label="Select Category",
+                                      empty_label="Select Learning Space",
                                       widget=forms.Select(attrs=
                                                           {
                                                               "class": "form-control selectpicker",
@@ -113,7 +113,7 @@ class ArticleCreateForm(forms.ModelForm):
 class ArticleUpdateForm(forms.ModelForm):
     category = forms.ModelChoiceField(queryset=Category.objects.filter(
                                       approved=True),
-                                      empty_label="Select Category",
+                                      empty_label="Select Learning Space",
                                       widget=forms.Select(attrs=
                                                           {
                                                               "class": "form-control selectpicker",
