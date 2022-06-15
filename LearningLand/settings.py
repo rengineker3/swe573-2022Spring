@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'Users',
     'crispy_forms',
     'taggit',
+    'ckeditor',
 
 ]
 
