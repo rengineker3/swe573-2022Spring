@@ -8,7 +8,6 @@ from PIL import Image
 from django.core.validators import MaxValueValidator
 from django.utils.text import slugify
 from taggit.managers import TaggableManager
-from ckeditor.fields import RichTextField
 
 
 
@@ -66,8 +65,7 @@ class Article(models.Model):
     image = models.ImageField(default='article-default.jpg',
                               upload_to='article_pics')
     image_credit = models.CharField(max_length=250, null=True, blank=True)
-    body = RichTextField(blank=True, null= True)
-    #body = models.CharField(max_length=5000, null=False, blank=False)
+    body = models.CharField(max_length=50000, null=False, blank=False)
     tags = TaggableManager(blank=True)
     date_published = models.DateTimeField(null=True, blank=True,
                                           default=timezone.now)
